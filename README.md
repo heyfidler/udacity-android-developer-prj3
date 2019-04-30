@@ -3,11 +3,11 @@
 ## Project Overview
 This project is movie lookup app. It does the following:
 
-* Allows selection from a list of sandwiches
-* Parses the data from the source JSON
-* Displays an image of the sandwich
-* Displays the details of a selected sandwich, including ingredients, origins, etc.
+* Opens in grid layout allow sorting by popularity or rating.
+* Allows selection of movie to view more details.
 
 ## To Review
-Clone this project, then open in Android Studio and run in an Emulator.
+-Clone this project
+-edit app/src/main/res/values/strings.xml and replace movie_db_api_key with your Movie DB key
+-open this project in Android Studion and run in an emulator
 
