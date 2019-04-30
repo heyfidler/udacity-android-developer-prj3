@@ -65,7 +65,7 @@ public class MovieListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    static class movieDBQueryTask extends AsyncTask<URL, Void, String> {
+    private static class movieDBQueryTask extends AsyncTask<URL, Void, String> {
         private final WeakReference<MovieListActivity> activityReference;
 
         // only retain a weak reference to the activity

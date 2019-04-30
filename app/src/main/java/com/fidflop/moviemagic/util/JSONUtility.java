@@ -21,9 +21,23 @@ public class JSONUtility {
 
     public static List<Movie> parseJSON(String json) {
         List<Movie> movies = new ArrayList<>();
+
+        if (json == null) {
+            return movies;
+        }
+
         try {
             JSONObject jsonRoot = new JSONObject(json);
+
+            if (jsonRoot == null) {
+                return movies;
+            }
+
             JSONArray jsonResults = jsonRoot.getJSONArray(RESULTS);
+
+            if (jsonResults == null) {
+                return movies;
+            }
 
             for (int i = 0; i < jsonResults.length(); i++) {
                 Movie movie = new Movie();
