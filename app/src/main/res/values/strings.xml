@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Movie Magic</string>
-    <string name="movie_db_api_key">blabla</string>
     <string name="movie_db_popular_url">http://api.themoviedb.org/3/movie/popular</string>
     <string name="movie_db_top_rated_url">http://api.themoviedb.org/3/movie/top_rated</string>
     <string name="movie_db_base_image_url">http://image.tmdb.org/t/p/</string>

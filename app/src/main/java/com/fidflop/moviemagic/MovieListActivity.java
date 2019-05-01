@@ -31,7 +31,7 @@ public class MovieListActivity extends AppCompatActivity {
     private void sortByPopularity() {
         URL url = NetworkUtils.getMovieDBURL(
                 getString(R.string.movie_db_popular_url),
-                getString(R.string.movie_db_api_key)
+                BuildConfig.MOVIE_DB_API_KEY
         );
         new movieDBQueryTask(this).execute(url);
     }
@@ -39,7 +39,7 @@ public class MovieListActivity extends AppCompatActivity {
     private void sortByRating() {
         URL url = NetworkUtils.getMovieDBURL(
                 getString(R.string.movie_db_top_rated_url),
-                getString(R.string.movie_db_api_key)
+                BuildConfig.MOVIE_DB_API_KEY
         );
         new movieDBQueryTask(this).execute(url);
     }

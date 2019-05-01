@@ -1,0 +1,8 @@
+/*/build/
+com_crashlytics_export_strings.xml
+local.properties
+gradle.properties
+.gradle/
+.idea/
+*.iml
+*.class
