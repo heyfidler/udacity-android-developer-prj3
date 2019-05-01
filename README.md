@@ -9,6 +9,6 @@ This project is movie lookup app. It does the following:
 
 ## To Review
 * Clone this project
-* Add your movie db API key to gradle.properties
-```movie_db_api_key="<key>```
+* Add your movie db API key to gradle.properties like this: 
+    ```movie_db_api_key="<key>""```
 * Open this project in Android Studio and run in an emulator
