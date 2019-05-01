@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-
 import java.lang.ref.WeakReference;
 
 import com.fidflop.moviemagic.data.Movie;
@@ -88,19 +86,23 @@ public class MovieListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String results) {
             final MovieListActivity activity = activityReference.get();
-            GridView gridview = activity.findViewById(R.id.grid);
 
             final List<Movie> movies = JSONUtility.parseJSON(results);
-            MovieGridAdapter movieGridAdapter = new MovieGridAdapter(activity, movies);
-            gridview.setAdapter(movieGridAdapter);
 
-            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // set up the RecyclerView
+            RecyclerView recyclerView = activity.findViewById(R.id.grid);
+            int numberOfColumns = 2;
+            recyclerView.setLayoutManager(new GridLayoutManager(activity, numberOfColumns));
+            MovieGridAdapter adapter = new MovieGridAdapter(activity, movies);
+
+            adapter.setClickListener(new MovieGridAdapter.ItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemClick(int position) {
                     Intent intent = new Intent(activity, MovieDetailActivity.class).putExtra("movie",movies.get(position));
                     activity.startActivity(intent);
                 }
             });
+            recyclerView.setAdapter(adapter);
         }
     }
 }

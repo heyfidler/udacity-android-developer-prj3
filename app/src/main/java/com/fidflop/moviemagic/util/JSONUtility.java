@@ -28,11 +28,6 @@ public class JSONUtility {
 
         try {
             JSONObject jsonRoot = new JSONObject(json);
-
-            if (jsonRoot == null) {
-                return movies;
-            }
-
             JSONArray jsonResults = jsonRoot.getJSONArray(RESULTS);
 
             if (jsonResults == null) {
