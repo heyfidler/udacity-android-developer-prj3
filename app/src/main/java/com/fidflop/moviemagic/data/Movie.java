@@ -1,9 +1,15 @@
 package com.fidflop.moviemagic.data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
+@Entity(tableName = "movie")
 public class Movie implements Parcelable {
+    @PrimaryKey
+    private int id;
     private String title;
     private String posterURL;
     private String voteAverage;
@@ -50,6 +56,13 @@ public class Movie implements Parcelable {
         this.releaseDate = releaseDate;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Movie() {
     }
@@ -75,6 +88,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(posterURL);
         dest.writeString(voteAverage);
@@ -83,6 +97,7 @@ public class Movie implements Parcelable {
     }
 
     private void readFromParcel(Parcel in) {
+        id = in.readInt();
         title = in.readString();
         posterURL = in.readString();
         voteAverage = in.readString();

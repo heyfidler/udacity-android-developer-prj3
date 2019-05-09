@@ -1,24 +1,27 @@
 package com.fidflop.moviemagic;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import java.lang.ref.WeakReference;
-
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.fidflop.moviemagic.data.AppDatabase;
 import com.fidflop.moviemagic.data.Movie;
 import com.fidflop.moviemagic.util.JSONUtility;
-import com.fidflop.moviemagic.util.NetworkUtils;
-
-import java.io.IOException;
-import java.net.URL;
+import com.fidflop.moviemagic.util.NetworkHelper;
+import org.json.JSONObject;
 import java.util.List;
 
 public class MovieListActivity extends AppCompatActivity {
+
+    private final int NUMBER_OF_COLUMNS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,19 +32,61 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     private void sortByPopularity() {
-        URL url = NetworkUtils.getMovieDBURL(
-                getString(R.string.movie_db_popular_url),
-                BuildConfig.MOVIE_DB_API_KEY
-        );
-        new movieDBQueryTask(this).execute(url);
+        String url = NetworkHelper.getMovieDBURL(
+                BuildConfig.MOVIE_DB_POPULAR_URL,
+                BuildConfig.MOVIE_DB_API_KEY);
+        updateGrid(url);
     }
 
     private void sortByRating() {
-        URL url = NetworkUtils.getMovieDBURL(
-                getString(R.string.movie_db_top_rated_url),
-                BuildConfig.MOVIE_DB_API_KEY
+        String url = NetworkHelper.getMovieDBURL(
+                BuildConfig.MOVIE_DB_TOP_RATED_URL,
+                BuildConfig.MOVIE_DB_API_KEY);
+        updateGrid(url);
+    }
+
+    private void sortByFavorites() {
+        updateGrid(AppDatabase.getInstance(this).movieDao().loadAllMovies());
+    }
+
+    private void updateGrid(String url) {
+        final RecyclerView recyclerView = findViewById(R.id.grid);
+        final Activity activity = this;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        final List<Movie> movies = JSONUtility.parseJSON(response);
+
+                        ((MovieListActivity) activity).updateGrid(movies);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
         );
-        new movieDBQueryTask(this).execute(url);
+        NetworkHelper.getInstance().getRequestQueue(this.getApplicationContext()).add(jsonObjectRequest);
+    }
+
+    private void updateGrid(final List<Movie> movies) {
+        RecyclerView recyclerView = findViewById(R.id.grid);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, NUMBER_OF_COLUMNS));
+        MovieGridAdapter adapter = new MovieGridAdapter(this, movies);
+
+        adapter.setClickListener(new MovieGridAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(getApplicationContext(), MovieDetailActivity.class).putExtra("movie",movies.get(position));
+                getApplicationContext().startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -59,50 +104,10 @@ public class MovieListActivity extends AppCompatActivity {
         } else if ( id == R.id.sortByRating) {
             sortByRating();
             return true;
+        } else if ( id == R.id.sortByFavories) {
+            sortByFavorites();
+            return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private static class movieDBQueryTask extends AsyncTask<URL, Void, String> {
-        private final WeakReference<MovieListActivity> activityReference;
-
-        // only retain a weak reference to the activity
-        movieDBQueryTask(MovieListActivity context) {
-            activityReference = new WeakReference<>(context);
-        }
-
-        @Override
-        protected String doInBackground(URL... params) {
-            URL searchUrl = params[0];
-            String results = null;
-            try {
-                results = NetworkUtils.getResponseFromHttpUrl(searchUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return results;
-        }
-
-        @Override
-        protected void onPostExecute(String results) {
-            final MovieListActivity activity = activityReference.get();
-
-            final List<Movie> movies = JSONUtility.parseJSON(results);
-
-            // set up the RecyclerView
-            RecyclerView recyclerView = activity.findViewById(R.id.grid);
-            int numberOfColumns = 2;
-            recyclerView.setLayoutManager(new GridLayoutManager(activity, numberOfColumns));
-            MovieGridAdapter adapter = new MovieGridAdapter(activity, movies);
-
-            adapter.setClickListener(new MovieGridAdapter.ItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-                    Intent intent = new Intent(activity, MovieDetailActivity.class).putExtra("movie",movies.get(position));
-                    activity.startActivity(intent);
-                }
-            });
-            recyclerView.setAdapter(adapter);
-        }
     }
 }

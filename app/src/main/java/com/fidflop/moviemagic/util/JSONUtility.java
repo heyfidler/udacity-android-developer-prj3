@@ -1,5 +1,7 @@
 package com.fidflop.moviemagic.util;
 
+import android.util.Log;
+
 import com.fidflop.moviemagic.data.Movie;
 
 import org.json.JSONArray;
@@ -11,6 +13,7 @@ import java.util.List;
 
 public class JSONUtility {
 
+    private static final String ID = "id";
     private static final String RESULTS = "results";
     private static final String TITLE = "title";
     private static final String POSTER_PATH = "poster_path";
@@ -19,7 +22,7 @@ public class JSONUtility {
     private static final String RELEASE_DATE = "release_date";
 
 
-    public static List<Movie> parseJSON(String json) {
+    public static List<Movie> parseJSON(JSONObject json) {
         List<Movie> movies = new ArrayList<>();
 
         if (json == null) {
@@ -27,8 +30,7 @@ public class JSONUtility {
         }
 
         try {
-            JSONObject jsonRoot = new JSONObject(json);
-            JSONArray jsonResults = jsonRoot.getJSONArray(RESULTS);
+            JSONArray jsonResults = json.getJSONArray(RESULTS);
 
             if (jsonResults == null) {
                 return movies;
@@ -36,6 +38,8 @@ public class JSONUtility {
 
             for (int i = 0; i < jsonResults.length(); i++) {
                 Movie movie = new Movie();
+                movie.setId(jsonResults.getJSONObject(i).getInt(ID));
+                Log.d(JSONUtility.class.getSimpleName(), "MOVIE ID: " + jsonResults.getJSONObject(i).getInt(ID));
                 movie.setTitle(jsonResults.getJSONObject(i).getString(TITLE));
                 movie.setPosterURL(jsonResults.getJSONObject(i).getString(POSTER_PATH));
                 movie.setVoteAverage(jsonResults.getJSONObject(i).getString(VOTE_AVERAGE));

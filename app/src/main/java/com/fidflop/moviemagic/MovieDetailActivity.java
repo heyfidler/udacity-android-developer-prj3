@@ -1,16 +1,26 @@
 package com.fidflop.moviemagic;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fidflop.moviemagic.data.AppDatabase;
 import com.fidflop.moviemagic.data.Movie;
+import com.fidflop.moviemagic.databinding.MovieDetailBinding;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 public class MovieDetailActivity extends AppCompatActivity {
+
+    private Movie movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,14 +29,22 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            Movie movie = getIntent().getExtras().getParcelable("movie");
+            this.movie = getIntent().getExtras().getParcelable("movie");
             setupUI(movie);
+        }
+
+        Log.d(this.getClass().getSimpleName(), "Current movie: " + movie.getTitle() + "  " + movie.getId());
+        List<Movie> movies = AppDatabase.getInstance(this).movieDao().loadAllMovies();
+        for (Movie movie:movies) {
+            Log.d(this.getClass().getSimpleName(), "MOVIE from DB: " + movie.getTitle());
         }
     }
 
     private void setupUI(Movie movie) {
+        MovieDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.movie_detail);
+
         // enable back button on action bar
-        ActionBar actionBar =getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -36,26 +54,45 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
 
         ImageView imageView = findViewById(R.id.poster_img);
-        String imageURL = getString(R.string.movie_db_base_image_url)
-                + getString(R.string.movie_db_image_size)
+        String imageURL = BuildConfig.MOVIE_DB_BASE_IMAGE_URL
+                + BuildConfig.MOVIE_DB_IMAGE_SIZE
                 + movie.getPosterURL();
 
         Picasso.get()
                 .load(imageURL)
-                .into(imageView);
+                .into(binding.posterImg);
 
-        ((TextView) findViewById(R.id.movie_release_date)).setText(getString(R.string.release_date, movie.getReleaseDate()));
-        ((TextView) findViewById(R.id.movie_vote)).setText(getString(R.string.vote_average, movie.getVoteAverage()));
-        ((TextView) findViewById(R.id.detail_title_tv)).setText(movie.getTitle());
-        ((TextView) findViewById(R.id.movie_overview)).setText(movie.getOverView());
+        binding.setMovie(movie);
+        binding.movieReleaseDate.setText(getString(R.string.release_date, movie.getReleaseDate()));
+        binding.movieVote.setText(getString(R.string.vote_average, movie.getVoteAverage()));
+
+        // is movie already a favorite?
+        Movie dbMovie = AppDatabase.getInstance(this).movieDao().getMovie(movie.getId());
+        if (dbMovie != null) {
+            binding.favoriteCheckBox.setChecked(true);
+        } else {
+            binding.favoriteCheckBox.setChecked(false);
+        }
+
+
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
             finish();
         }
-        return true;
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void favoriteClicked(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+
+        if (checked) {
+            AppDatabase.getInstance(this).movieDao().insertMovie(movie);
+        } else {
+            AppDatabase.getInstance(this).movieDao().deleteMovie(movie);
+        }
     }
 }

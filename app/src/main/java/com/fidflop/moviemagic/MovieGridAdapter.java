@@ -44,8 +44,8 @@ class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.ViewHolder>
     // binds the data to the TextView in each cell
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String imageURL = context.getString(R.string.movie_db_base_image_url)
-                + context.getString(R.string.movie_db_image_size)
+        String imageURL = BuildConfig.MOVIE_DB_BASE_IMAGE_URL
+                + BuildConfig.MOVIE_DB_IMAGE_SIZE
                 + movies.get(position).getPosterURL();
 
         Picasso.get()
