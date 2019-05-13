@@ -8,7 +8,7 @@ import android.util.Log;
 import java.util.List;
 
 public class MovieViewModel extends AndroidViewModel {
-    private LiveData<List<Movie>> movies;
+    private final LiveData<List<Movie>> movies;
 
     public MovieViewModel(Application application) {
         super(application);

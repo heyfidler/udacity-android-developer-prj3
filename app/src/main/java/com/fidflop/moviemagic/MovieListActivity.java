@@ -1,6 +1,5 @@
 package com.fidflop.moviemagic;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.fidflop.moviemagic.data.AppDatabase;
 import com.fidflop.moviemagic.data.Movie;
 import com.fidflop.moviemagic.data.MovieViewModel;
 import com.fidflop.moviemagic.util.JSONUtility;
@@ -29,7 +27,6 @@ public class MovieListActivity extends AppCompatActivity {
     private static final int NUMBER_OF_COLUMNS = 2;
     private static final String POPULAR = "popular";
     private static final String TOP_RATED = "top_rated";
-    private MovieViewModel movieViewModel;
     private List<Movie> favoriteMovies;
     private boolean isFavoritesView = false;
 

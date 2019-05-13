@@ -2,10 +2,11 @@
     <string name="app_name">Movie Magic</string>
     <string name="sort_by_popularity">sort by popularity</string>
     <string name="sort_by_rating">sort by rating</string>
-    <string name="sort_by_fovorites">sort by favories</string>
+    <string name="sort_by_favorites">sort by favorites</string>
     <string name="vote_average">vote average: %1$s</string>
     <string name="release_date">release date: %1$s</string>
     <string name="movie_poster">movie poster</string>
     <string name="trailer">press to watch trailer %1$s</string>
     <string name="review">press to read review %1$s</string>
+    <string name="favorite">favorite?</string>
 </resources>

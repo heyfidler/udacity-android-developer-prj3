@@ -17,11 +17,9 @@ class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.ViewHolder>
 
     private final LayoutInflater layoutinflater;
     private final List<Movie> movies;
-    private final Context context;
     private ItemClickListener clickListener;
 
     MovieGridAdapter(Context context, List<Movie> movieListView) {
-        this.context = context;
         layoutinflater =(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         movies = movieListView;
     }

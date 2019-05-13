@@ -37,7 +37,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private Movie movie;
     private MovieDetailBinding binding;
-    private List<View> videoAndReviewChain = new ArrayList<>();
+    private final List<View> videoAndReviewChain = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +130,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void addVideoAndReviewChain() {
-        if (videoAndReviewChain == null || videoAndReviewChain.isEmpty()) {
+        if (videoAndReviewChain.isEmpty()) {
             return;
         } else if (1 == videoAndReviewChain.size()) {
             videoAndReviewChain.add(new View(this));

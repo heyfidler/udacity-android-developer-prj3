@@ -1,7 +1,5 @@
 package com.fidflop.moviemagic.util;
 
-import android.util.Log;
-
 import com.fidflop.moviemagic.data.Movie;
 import com.fidflop.moviemagic.data.Review;
 import com.fidflop.moviemagic.data.Video;
@@ -22,7 +20,6 @@ public class JSONUtility {
     private static final String VOTE_AVERAGE = "vote_average";
     private static final String OVERVIEW = "overview";
     private static final String RELEASE_DATE = "release_date";
-    private static final String NAME = "name";
     private static final String KEY = "key";
     private static final String TYPE = "type";
     private static final String SITE = "site";
@@ -79,7 +76,6 @@ public class JSONUtility {
 
             for (int i = 0; i < jsonResults.length(); i++) {
                 Video video = new Video();
-                video.setName(jsonResults.getJSONObject(i).getString(NAME));
                 video.setKey(jsonResults.getJSONObject(i).getString(KEY));
 
                 // only get trailers from youtube
