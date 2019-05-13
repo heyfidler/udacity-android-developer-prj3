@@ -6,4 +6,6 @@
     <string name="vote_average">vote average: %1$s</string>
     <string name="release_date">release date: %1$s</string>
     <string name="movie_poster">movie poster</string>
+    <string name="trailer">press to watch trailer %1$s</string>
+    <string name="review">press to read review %1$s</string>
 </resources>

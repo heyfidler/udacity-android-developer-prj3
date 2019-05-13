@@ -10,6 +10,8 @@ public class NetworkHelper {
     private RequestQueue requestQueue;
 
     private static final String API_QUERY_STRING = "?api_key=";
+    private static final String VIDEOS = "/videos";
+    private static final String REVIEWS = "/reviews";
 
     private NetworkHelper() {
     }
@@ -30,5 +32,13 @@ public class NetworkHelper {
 
     public static String getMovieDBURL(String urlString, String apiKey) {
         return urlString + API_QUERY_STRING + apiKey;
+    }
+
+    public static String getVideoDBURL(String urlString, String apiKey, String id) {
+        return urlString + id + VIDEOS + API_QUERY_STRING + apiKey;
+    }
+
+    public static String getReviewDBURL(String urlString, String apiKey, String id) {
+        return urlString + id + REVIEWS + API_QUERY_STRING + apiKey;
     }
 }

@@ -16,17 +16,17 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "MOVIE_DB_API_KEY", movie_db_api_key
-            buildConfigField "String", "MOVIE_DB_POPULAR_URL", movie_db_popular_url
-            buildConfigField "String", "MOVIE_DB_TOP_RATED_KEY", movie_db_top_rated_url
+            buildConfigField "String", "MOVIE_DB_BASE_URL", movie_db_base_url
             buildConfigField "String", "MOVIE_DB_BASE_IMAGE_URL", movie_db_base_image_url
             buildConfigField "String", "MOVIE_DB_IMAGE_SIZE", movie_db_image_size
+            buildConfigField "String", "MOVIE_TRAILER_BASE_URL", movie_trailer_base_url
         }
         debug {
             buildConfigField "String", "MOVIE_DB_API_KEY", movie_db_api_key
-            buildConfigField "String", "MOVIE_DB_POPULAR_URL", movie_db_popular_url
-            buildConfigField "String", "MOVIE_DB_TOP_RATED_URL", movie_db_top_rated_url
+            buildConfigField "String", "MOVIE_DB_BASE_URL", movie_db_base_url
             buildConfigField "String", "MOVIE_DB_BASE_IMAGE_URL", movie_db_base_image_url
             buildConfigField "String", "MOVIE_DB_IMAGE_SIZE", movie_db_image_size
+            buildConfigField "String", "MOVIE_TRAILER_BASE_URL", movie_trailer_base_url
         }
     }
 
@@ -48,4 +48,6 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.1'
     implementation "android.arch.persistence.room:runtime:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
 }
