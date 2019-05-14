@@ -129,7 +129,7 @@ public class MovieListActivity extends AppCompatActivity {
         } else if ( id == R.id.sortByRating) {
             sortByRating();
             return true;
-        } else if ( id == R.id.sortByFavories) {
+        } else if ( id == R.id.sortByFavorites) {
             sortByFavorites();
             return true;
         }
