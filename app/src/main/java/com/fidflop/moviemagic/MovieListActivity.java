@@ -3,6 +3,7 @@ package com.fidflop.moviemagic;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,14 +28,21 @@ public class MovieListActivity extends AppCompatActivity {
     private static final int NUMBER_OF_COLUMNS = 2;
     private static final String POPULAR = "popular";
     private static final String TOP_RATED = "top_rated";
+    private static final String LIST_STATE_KEY = "LIST_STATE_KEY";
     private List<Movie> favoriteMovies;
     private boolean isFavoritesView = false;
+    private GridLayoutManager gridLayoutManager;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.movie_list);
+
+        recyclerView = findViewById(R.id.grid);
+        gridLayoutManager = new GridLayoutManager(this, NUMBER_OF_COLUMNS);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
         setupViewModel();
         sortByPopularity();
@@ -100,14 +108,13 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     private void updateGrid(final List<Movie> movies) {
-        RecyclerView recyclerView = findViewById(R.id.grid);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, NUMBER_OF_COLUMNS));
         MovieGridAdapter adapter = new MovieGridAdapter(this, movies);
 
         adapter.setClickListener(new MovieGridAdapter.ItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(getApplicationContext(), MovieDetailActivity.class).putExtra("movie",movies.get(position));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(intent);
             }
         });
@@ -134,5 +141,22 @@ public class MovieListActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+
+        if (gridLayoutManager != null) {
+            Parcelable mListState = gridLayoutManager.onSaveInstanceState();
+            state.putParcelable(LIST_STATE_KEY, mListState);
+        }
+    }
+
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+
+        if (state != null && gridLayoutManager != null) {
+            gridLayoutManager.onRestoreInstanceState(state.getParcelable(LIST_STATE_KEY));
+        }
     }
 }

@@ -133,7 +133,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         if (videoAndReviewChain.isEmpty()) {
             return;
         } else if (1 == videoAndReviewChain.size()) {
-            videoAndReviewChain.add(new View(this));
+            View v = new View(this);
+            v.setId(View.generateViewId());
+            videoAndReviewChain.add(v);
         }
 
         int[] chain = new  int [videoAndReviewChain.size()];
