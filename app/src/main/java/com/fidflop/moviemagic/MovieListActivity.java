@@ -21,6 +21,8 @@ import com.fidflop.moviemagic.data.MovieViewModel;
 import com.fidflop.moviemagic.util.JSONUtility;
 import com.fidflop.moviemagic.util.NetworkHelper;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieListActivity extends AppCompatActivity {
@@ -29,7 +31,9 @@ public class MovieListActivity extends AppCompatActivity {
     private static final String POPULAR = "popular";
     private static final String TOP_RATED = "top_rated";
     private static final String LIST_STATE_KEY = "LIST_STATE_KEY";
+    private static final String MOVIES_STATE_KEY = "MOVIES_STATE_KEY";
     private List<Movie> favoriteMovies;
+    private List<Movie> currentMovies;
     private boolean isFavoritesView = false;
     private GridLayoutManager gridLayoutManager;
     private RecyclerView recyclerView;
@@ -45,7 +49,13 @@ public class MovieListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
 
         setupViewModel();
-        sortByPopularity();
+
+        if (savedInstanceState != null) {
+            currentMovies = savedInstanceState.getParcelableArrayList(MOVIES_STATE_KEY);
+            updateGrid(currentMovies);
+        } else {
+            sortByPopularity();
+        }
     }
 
     private void sortByPopularity() {
@@ -108,6 +118,7 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     private void updateGrid(final List<Movie> movies) {
+        currentMovies = movies;
         MovieGridAdapter adapter = new MovieGridAdapter(this, movies);
 
         adapter.setClickListener(new MovieGridAdapter.ItemClickListener() {
@@ -148,6 +159,7 @@ public class MovieListActivity extends AppCompatActivity {
 
         if (gridLayoutManager != null) {
             Parcelable mListState = gridLayoutManager.onSaveInstanceState();
+            state.putParcelableArrayList(MOVIES_STATE_KEY, new ArrayList(currentMovies));
             state.putParcelable(LIST_STATE_KEY, mListState);
         }
     }
